@@ -86,21 +86,39 @@ function App() {
         <div className="course-grid">
           {filteredCourses.length > 0 ? (
   filteredCourses.map((course) => (
-    <div key={course.id} className="course-card">
+<div key={course.id} className="course-card">
+  {editingId === course.id ? (
+    <>
+      <input
+        value={editData.title}
+        onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+      />
+      <input
+        value={editData.description}
+        onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+      />
+      <button type="button" onClick={() => handleUpdate(course.id)}>Save</button>
+      <button type="button" onClick={() => setEditingId(null)}>Cancel</button>
+    </>
+  ) : (
+    <>
       <h3>{course.title}</h3>
       <p>{course.description}</p>
-
       <button
         type="button"
         onClick={() => {
-          setCourses((prevCourses) =>
-            prevCourses.filter((c) => c.id !== course.id)
-          );
+          setEditingId(course.id);
+          setEditData({ title: course.title, description: course.description });
         }}
       >
+        Edit
+      </button>
+      <button type="button" onClick={() => handleDelete(course.id)}>
         Delete
       </button>
-    </div>
+    </>
+  )}
+</div>
   ))
 ) : (
   <p>No courses found!</p>
